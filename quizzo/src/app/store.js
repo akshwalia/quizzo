@@ -2,6 +2,8 @@
 import { create } from 'zustand'
 
 const useStore = create((set) => ({
+    initialLoading: true,
+    setInitialLoading: (loading) => set({ initialLoading: loading }),
     questions: [],
     setQuestions: (questions) => set({ questions }),
 

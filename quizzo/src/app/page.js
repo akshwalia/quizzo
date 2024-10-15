@@ -14,6 +14,7 @@ import Link from 'next/link'
 
 import socket from './socket'
 import { customAlphabet } from 'nanoid'
+import { useRouter } from 'next/navigation'
 
 const quizzes = [
   { name: "Globe Trotter", topic: "Geography", icon: Globe, description: "Explore the world's wonders and test your knowledge of countries, capitals, and landmarks." },
@@ -30,29 +31,48 @@ export default function Home() {
   const [showCreateRoom, setShowCreateRoom] = useState(false);
   const [showJoinRoom, setShowJoinRoom] = useState(false);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     function onConnect() {
       setLoading(false);
       console.log('Connected to server');
-
     }
 
     function onDisconnect() {
       console.log('Disconnected from server');
-
     }
 
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
-    // socket.on('foo', onFooEvent);
+
+    // Check if the page has finished loading
+    if (document.readyState === 'complete') {
+      setLoading(false);
+    } else {
+      window.addEventListener('load', () => setLoading(false));
+    }
 
     return () => {
       socket.off('connect', onConnect);
       socket.off('disconnect', onDisconnect);
-      // socket.off('foo', onFooEvent);
+      window.removeEventListener('load', () => setLoading(false));
     };
   }, []);
+
+  useEffect(() => {
+    if (!router.isReady) return;
+
+    const handleRouteChange = () => {
+      setLoading(false);
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.isReady]);
 
   return (
     <>
