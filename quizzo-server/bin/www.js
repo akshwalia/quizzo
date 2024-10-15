@@ -246,7 +246,7 @@ io.on('connection', (socket) => {
 
     let resJSON = JSON.parse(resString);
 
-    console.log(resJSON);
+    // console.log(resJSON);
 
     io.to(roomId).emit('quiz_started', {
       questions: resJSON
