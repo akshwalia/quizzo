@@ -45,17 +45,13 @@ export default function QuizRoom() {
     useEffect(() => {
         socket.on("player_joined", (data) => {
             setRoomPlayers(data.players);
-            console.log("Player Joined:", data.playerName);
         });
 
         socket.on("player_left", (data) => {
             setRoomPlayers(data.players);
-            console.log("Player Left:", data.playerName);
         });
 
         socket.on("host_left", (data) => {
-            console.log("Host Left:", data);
-            setAlertMessage("Host has left the room.");
             setShowAlert(true);
         });
 

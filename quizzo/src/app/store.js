@@ -6,8 +6,10 @@ const useStore = create((set) => ({
     setQuestions: (questions) => set({ questions }),
 
     getQuestions: async (topic, numQuestions, difficulty) => {
+        const url = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
+
         try {
-            const response = await fetch("http://localhost:3001/getQuestions", {
+            const response = await fetch(`${url}/getQuestions`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

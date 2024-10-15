@@ -14,7 +14,19 @@ import useStore from "@/app/store"
 import { useToast } from "@/hooks/use-toast"
 
 
-const topics = ["General Knowledge", "Science", "History", "Geography", "Sports", "Other"]
+const topics = [
+    "Politics",
+    "Animals",
+    "Geography",
+    "History",
+    "Cinema",
+    "Anime",
+    "Pokemon",
+    "Technology",
+    "Science",
+    "Sports",
+    "Other"
+]
 const difficulties = ["Easy", "Medium", "Hard"]
 
 export default function Settings({setLoading, roomId}) {

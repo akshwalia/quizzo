@@ -30,7 +30,6 @@ export function CreateRoomCard({ showCreateRoom, setShowCreateRoom }) {
 
     useEffect(() => {
         socket.on("room_created", (data) => {
-            console.log(data);
             router.push(`/quiz/${data.roomId}`);
         });
     }, [socket, router]);

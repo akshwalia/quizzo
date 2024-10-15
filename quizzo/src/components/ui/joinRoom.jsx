@@ -31,8 +31,6 @@ export function JoinRoomCard({ showJoinRoom, setShowJoinRoom }) {
       setError("Please fill in all fields")
       return
     }
-    // Handle room joining logic here
-    console.log("Joining room:", { name, roomId })
     // Reset form
     
     socket.emit("join_room", {

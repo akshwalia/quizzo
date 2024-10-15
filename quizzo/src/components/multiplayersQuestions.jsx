@@ -33,9 +33,6 @@ export default function Questions({ questions, roomId, leaderboard, allPlayersFi
         }, 800)
     }
 
-    const handlePlayAgain = () => {
-        console.log("Play again");
-    };
 
     const progress = ((currentQuestionIndex + 1) / questions.length) * 100
 

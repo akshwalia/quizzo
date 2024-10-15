@@ -19,7 +19,6 @@ export default function Play() {
     if (questions.length > 0) {
       setQuizStarted(true)
       setLoading(false)
-      console.log("Questions:", questions)
     }
   }, [questions])
 

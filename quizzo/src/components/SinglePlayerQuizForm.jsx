@@ -24,17 +24,14 @@ export default function QuizPlayPage({ setLoading, setQuizStarted }) {
         "Politics",
         "Animals",
         "Geography",
+        "History",
         "Cinema",
         "Anime",
         "Pokemon",
         "Technology",
         "Science",
+        "Sports",
         "Other"
-    ]
-
-    const timeLimits = [
-        { value: "30", label: "30 seconds" },
-        { value: "60", label: "1 minute" }
     ]
 
     const handleSubmit = async (e) => {
@@ -42,7 +39,6 @@ export default function QuizPlayPage({ setLoading, setQuizStarted }) {
         const formErrors = validateForm()
         if (Object.keys(formErrors).length === 0) {
             const selectedTopic = topic === "Other" ? otherTopic : topic
-            console.log("Topic:", selectedTopic, "Time Limit:", timeLimit, "Number of Questions:", numQuestions)
             setErrors({})
 
             setLoading(true)
@@ -77,7 +73,6 @@ export default function QuizPlayPage({ setLoading, setQuizStarted }) {
         if(!difficulty) formErrors.difficulty = "Difficulty is required";
         if (!topic) formErrors.topic = "Topic is required"
         if (topic === "Other" && !otherTopic.trim()) formErrors.otherTopic = "Please specify the topic"
-        if (!timeLimit) formErrors.timeLimit = "Time limit is required"
         if (!numQuestions) {
             formErrors.numQuestions = "Number of questions is required"
         } else if (parseInt(numQuestions) < 5 || parseInt(numQuestions) > 25) {
@@ -121,22 +116,6 @@ export default function QuizPlayPage({ setLoading, setQuizStarted }) {
                             {errors.otherTopic && <p className="mt-1 text-sm text-red-600" role="alert">{errors.otherTopic}</p>}
                         </div>
                     )}
-                    <div>
-                        <Label htmlFor="timeLimit" className="text-black">Time Limit</Label>
-                        <Select value={timeLimit} onValueChange={setTimeLimit}>
-                            <SelectTrigger id="timeLimit" className="w-full mt-1 border-gray-300 focus:border-black focus:ring-black">
-                                <SelectValue placeholder="Select time limit" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {timeLimits.map((limit) => (
-                                    <SelectItem key={limit.value} value={limit.value}>
-                                        {limit.label}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                        {errors.timeLimit && <p className="mt-1 text-sm text-red-600" role="alert">{errors.timeLimit}</p>}
-                    </div>
                     <div>
                         <Label htmlFor="numQuestions" className="text-black">Number of Questions (5-25)</Label>
                         <Input

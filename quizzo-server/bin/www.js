@@ -31,7 +31,7 @@ var server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "*",
     methods: ["GET", "POST"]
   }
 });
@@ -223,7 +223,7 @@ io.on('connection', (socket) => {
 
 
     const n = room.settings.questions;
-    const topic = room.settings.topic;
+    const topic = room.settings.topic==="Other"?room.settings.customTopic:room.settings.topic;
     const difficulty = room.settings.difficulty;
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
