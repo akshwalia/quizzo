@@ -289,7 +289,7 @@ io.on('connection', (socket) => {
 
   socket.on("play_again", ({ roomId }) => {
     const room = rooms.get(roomId);
-    room.hasStarted = false;s
+    room.hasStarted = false;
     room.leaderboard = [];
     io.to(roomId).emit('play_again');
   });
