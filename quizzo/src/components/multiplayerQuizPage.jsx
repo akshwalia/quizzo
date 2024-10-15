@@ -172,7 +172,7 @@ export default function Settings({setLoading, roomId}) {
                             </div>
                         )}
 
-                        <div>
+                        {/* <div>
                             <Label htmlFor="duration">Duration (minutes)</Label>
                             <Slider
                                 id="duration"
@@ -184,7 +184,7 @@ export default function Settings({setLoading, roomId}) {
                                 disabled={!isHost}
                             />
                             <div className="text-right text-sm text-muted-foreground mt-1">{settings.duration} minutes</div>
-                        </div>
+                        </div> */}
 
                         <div>
                             <Label htmlFor="questions">Number of Questions</Label>

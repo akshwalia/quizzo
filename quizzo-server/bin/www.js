@@ -288,8 +288,8 @@ io.on('connection', (socket) => {
   })
 
   socket.on("play_again", ({ roomId }) => {
-    room.hasStarted = false;
     const room = rooms.get(roomId);
+    room.hasStarted = false;s
     room.leaderboard = [];
     io.to(roomId).emit('play_again');
   });

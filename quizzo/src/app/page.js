@@ -8,6 +8,7 @@ import { Globe, Film, Tv, Gamepad2, Cpu, FlaskConical, Dog, Users, PlusCircle, L
 import { CreateRoomCard } from '@/components/ui/createRoom'
 import { JoinRoomCard } from '@/components/ui/joinRoom'
 import { useEffect, useState } from 'react'
+import Loader from '@/components/loader'
 
 import Link from 'next/link'
 
@@ -28,16 +29,18 @@ const quizzes = [
 export default function Home() {
   const [showCreateRoom, setShowCreateRoom] = useState(false);
   const [showJoinRoom, setShowJoinRoom] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     function onConnect() {
+      setLoading(false);
       console.log('Connected to server');
-      
+
     }
 
     function onDisconnect() {
       console.log('Disconnected from server');
-      
+
     }
 
     socket.on('connect', onConnect);
@@ -53,57 +56,60 @@ export default function Home() {
 
   return (
     <>
+      {loading && <Loader />}
       {showCreateRoom && <CreateRoomCard showCreateRoom={showCreateRoom} setShowCreateRoom={setShowCreateRoom} />}
       {showJoinRoom && <JoinRoomCard showJoinRoom={showJoinRoom} setShowJoinRoom={setShowJoinRoom} />}
-      <div className="min-h-screen bg-white p-8">
-        <header className="flex flex-col gap-10 justify-between items-center mb-8 space-y-4 md:space-y-0">
-          <h1 className="text-4xl font-bold text-black">Quizzo</h1>
-          <p className="text-lg text-gray-700 text-center max-w-2xl">
-            Welcome to Quizzo, the ultimate live quiz game platform! Compete with friends in real-time across various exciting topics. Create a room to host your own quiz or join an existing one to test your knowledge. Get ready for a fun, challenging, and educational experience!
-          </p>
-        </header>
-        <div className="mb-4 flex justify-center">
-          <div className="flex items-center space-x-4">
-            <Button className="bg-black hover:bg-gray-800 text-white" onClick={() => setShowCreateRoom(true)}>
-              <PlusCircle className="w-4 h-4 mr-2" />
-              Create Room
-            </Button>
-            <Button className="bg-white hover:bg-gray-100 text-black border border-black" onClick={() => setShowJoinRoom(true)}>
-              <LogIn className="w-4 h-4 mr-2" />
-              Join Room
-            </Button>
+      {!loading &&
+        <div className="min-h-screen bg-white p-8">
+          <header className="flex flex-col gap-10 justify-between items-center mb-8 space-y-4 md:space-y-0">
+            <h1 className="text-4xl font-bold text-black">Quizzo</h1>
+            <p className="text-lg text-gray-700 text-center max-w-2xl">
+              Welcome to Quizzo, the ultimate live quiz game platform! Compete with friends in real-time across various exciting topics. Create a room to host your own quiz or join an existing one to test your knowledge. Get ready for a fun, challenging, and educational experience!
+            </p>
+          </header>
+          <div className="mb-4 flex justify-center">
+            <div className="flex items-center space-x-4">
+              <Button className="bg-black hover:bg-gray-800 text-white" onClick={() => setShowCreateRoom(true)}>
+                <PlusCircle className="w-4 h-4 mr-2" />
+                Create Room
+              </Button>
+              <Button className="bg-white hover:bg-gray-100 text-black border border-black" onClick={() => setShowJoinRoom(true)}>
+                <LogIn className="w-4 h-4 mr-2" />
+                Join Room
+              </Button>
+            </div>
           </div>
-        </div>
-        <div className="flex justify-center mb-14">
-          <div className='mr-1'>No friends? </div> <Link href="/play" className='underline'>Play alone</Link>
-        </div>
-        <main className="text-center">
-          <h2 className="text-3xl font-semibold text-black mb-8">Discover Quizzes</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-            {quizzes.map((quiz, index) => (
-              <div
-                key={quiz.name}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-              >
-                <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 h-full bg-white border border-gray-200">
-                  <CardHeader className="bg-black text-white p-4">
-                    <CardTitle className="flex flex-col gap-3 items-center justify-center space-x-2 text-lg">
-                      <quiz.icon className="w-14 h-14" />
-                      <span>{quiz.name}</span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-4">
-                    <p className="text-sm text-gray-600 mb-2 font-bold">{quiz.topic}</p>
-                    <p className="text-sm text-gray-700">{quiz.description}</p>
-                  </CardContent>
-                </Card>
-              </div>
-            ))}
+          <div className="flex justify-center mb-14">
+            <div className='mr-1'>No friends? </div> <Link href="/play" className='underline'>Play alone</Link>
           </div>
-        </main>
-      </div>
+          <main className="text-center">
+            <h2 className="text-3xl font-semibold text-black mb-8">Discover Quizzes</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+              {quizzes.map((quiz, index) => (
+                <div
+                  key={quiz.name}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                >
+                  <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 h-full bg-white border border-gray-200">
+                    <CardHeader className="bg-black text-white p-4">
+                      <CardTitle className="flex flex-col gap-3 items-center justify-center space-x-2 text-lg">
+                        <quiz.icon className="w-14 h-14" />
+                        <span>{quiz.name}</span>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-4">
+                      <p className="text-sm text-gray-600 mb-2 font-bold">{quiz.topic}</p>
+                      <p className="text-sm text-gray-700">{quiz.description}</p>
+                    </CardContent>
+                  </Card>
+                </div>
+              ))}
+            </div>
+          </main>
+        </div>
+      }
     </>
   )
 }
