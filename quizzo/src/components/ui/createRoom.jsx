@@ -1,10 +1,12 @@
+"use client"
+
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { AlertCircle } from 'lucide-react'
+import { AlertCircle, Loader2 } from 'lucide-react'
 import useStore from "@/app/store"
 import { useRouter } from 'next/navigation'
 
@@ -17,6 +19,7 @@ export function CreateRoomCard({ showCreateRoom, setShowCreateRoom }) {
     const setName = useStore((state) => state.setName);
     const [error, setError] = useState("")
     const [isVisible, setIsVisible] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
     const router = useRouter()
     const setRoomPlayers = useStore((state) => state.setRoomPlayers);
     const setIsHost = useStore((state) => state.setIsHost);
@@ -29,10 +32,20 @@ export function CreateRoomCard({ showCreateRoom, setShowCreateRoom }) {
     }, [showCreateRoom])
 
     useEffect(() => {
-        socket.on("room_created", (data) => {
+        const handleRoomCreated = (data) => {
+            
+            setRoomPlayers(data.players);
+            setIsHost(data.isHost);
+            setSettings(data.settings);
             router.push(`/quiz/${data.roomId}`);
-        });
-    }, [socket, router]);
+        };
+
+        socket.on("room_created", handleRoomCreated);
+
+        return () => {
+            socket.off("room_created", handleRoomCreated);
+        };
+    }, [router, setRoomPlayers, setIsHost, setSettings]);
 
     const handleCreateRoom = async () => {
         if (!name) {
@@ -40,18 +53,15 @@ export function CreateRoomCard({ showCreateRoom, setShowCreateRoom }) {
             return;
         }
 
+        setIsLoading(true);
+        setError("");
+
         const nanoid = customAlphabet('1234567890', 6);
         const roomId = nanoid();
 
         socket.emit("create_room", {
             hostName: name,
             roomId: roomId
-        });
-
-        socket.on("room_created", (data) => {
-            setRoomPlayers(data.players);
-            setIsHost(data.isHost);
-            setSettings(data.settings);
         });
     };
 
@@ -105,11 +115,21 @@ export function CreateRoomCard({ showCreateRoom, setShowCreateRoom }) {
                                         </p>
                                     )}
                                 </div>
-
                             </CardContent>
                             <CardFooter>
-                                <Button onClick={handleCreateRoom} className="w-full bg-black hover:bg-gray-800 text-white">
-                                    Create Room
+                                <Button 
+                                    onClick={handleCreateRoom} 
+                                    className="w-full bg-black hover:bg-gray-800 text-white"
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? (
+                                        <>
+                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                            Creating...
+                                        </>
+                                    ) : (
+                                        'Create Room'
+                                    )}
                                 </Button>
                             </CardFooter>
                         </Card>

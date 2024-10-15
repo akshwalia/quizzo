@@ -43,6 +43,10 @@ export default function QuizRoom() {
     }, []);
 
     useEffect(() => {
+        setShowAlert(alertMessage ? true : false);
+    }, [alertMessage]);
+
+    useEffect(() => {
         socket.on("player_joined", (data) => {
             setRoomPlayers(data.players);
         });
@@ -52,7 +56,7 @@ export default function QuizRoom() {
         });
 
         socket.on("host_left", (data) => {
-            setShowAlert(true);
+            setAlertMessage("Host has left the room.");
         });
 
         socket.on("settings_updated", (data) => {
@@ -87,7 +91,6 @@ export default function QuizRoom() {
 
         socket.on("room_error", (data) => {
             setAlertMessage(data.message);
-            setShowAlert(true);
         });
     }, [socket]);
 

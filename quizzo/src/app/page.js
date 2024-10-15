@@ -8,7 +8,7 @@ import { Globe, Film, Tv, Gamepad2, Cpu, FlaskConical, Dog, Users, PlusCircle, L
 import { CreateRoomCard } from '@/components/ui/createRoom'
 import { JoinRoomCard } from '@/components/ui/joinRoom'
 import { useEffect, useState } from 'react'
-import Loader from '@/components/loader'
+import Loader from '@/components/initialLoader'
 
 import Link from 'next/link'
 
@@ -29,7 +29,7 @@ const quizzes = [
 export default function Home() {
   const [showCreateRoom, setShowCreateRoom] = useState(false);
   const [showJoinRoom, setShowJoinRoom] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     function onConnect() {
