@@ -120,6 +120,7 @@ io.on('connection', (socket) => {
     rooms.set(roomId, {
       host: socket.id,
       hostName,
+      hasStarted: false,
       players: [{
         id: socket.id,
         name: hostName,
@@ -156,6 +157,11 @@ io.on('connection', (socket) => {
 
     if (!room) {
       socket.emit('room_error', { message: 'Room does not exist' });
+      return;
+    }
+
+    if(room.hasStarted) {
+      socket.emit('room_error', { message: 'Game has already started' });
       return;
     }
 
@@ -219,6 +225,8 @@ io.on('connection', (socket) => {
       return;
     }
 
+    room.hasStarted = true;
+
     io.to(roomId).emit('loading');
 
 
@@ -280,6 +288,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on("play_again", ({ roomId }) => {
+    room.hasStarted = false;
     const room = rooms.get(roomId);
     room.leaderboard = [];
     io.to(roomId).emit('play_again');
