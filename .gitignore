@@ -1,0 +1,9 @@
+quizzo/node_modules/
+quizzo/.next/
+quizzo/.env
+
+quizzo-server/node_modules
+quizzo-server/.env
+
+/node_modules
+.env
