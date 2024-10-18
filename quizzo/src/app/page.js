@@ -47,7 +47,7 @@ export default function Home() {
     socket.on('disconnect', onDisconnect);
 
     // Check if the page has finished loading
-    if (document.readyState === 'complete') {
+    if (document.readyState === 'complete' && socket.connected) {
       setLoading(false);
     } else {
       window.addEventListener('load', () => setLoading(false));
