@@ -6,6 +6,7 @@ export default function Loader() {
             <div className="flex flex-col gap-3 items-center">
                 <div className="w-8 h-8 border-4 border-gray-300 border-t-black rounded-full animate-spin [animation-duration:0.75s]"></div>
                 <div className="text-xs">Hang tight! The server is booting up and will be ready to serve shortly</div>
+                <div className="text-xs">The server might have shut down due to inactivity. (Might take a minute or two)</div>
             </div>
         </div>
     )
