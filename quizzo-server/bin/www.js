@@ -160,7 +160,7 @@ io.on('connection', (socket) => {
       return;
     }
 
-    if(room.hasStarted) {
+    if (room.hasStarted) {
       socket.emit('room_error', { message: 'Game has already started' });
       return;
     }
@@ -231,7 +231,7 @@ io.on('connection', (socket) => {
 
 
     const n = room.settings.questions;
-    const topic = room.settings.topic==="Other"?room.settings.customTopic:room.settings.topic;
+    const topic = room.settings.topic === "Other" ? room.settings.customTopic : room.settings.topic;
     const difficulty = room.settings.difficulty;
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -242,7 +242,9 @@ io.on('connection', (socket) => {
 
     let responseText = await result.response.text();
 
-    let resString = responseText.slice(8, -3);
+    let resString = responseText.slice(8, -4);
+
+    // console.log(resString);
 
     let resJSON = JSON.parse(resString);
 
@@ -255,7 +257,7 @@ io.on('connection', (socket) => {
     room.startTime = Date.now();
   });
 
-  socket.on("quiz_completed", ({ roomId, score}) => {
+  socket.on("quiz_completed", ({ roomId, score }) => {
     const room = rooms.get(roomId);
 
     const playerIndex = room.players.findIndex(player => player.id === socket.id);
@@ -265,7 +267,7 @@ io.on('connection', (socket) => {
     room.leaderboard.push({
       name: room.players[playerIndex].name,
       score: score,
-      time: (Date.now() - room.startTime)/1000
+      time: (Date.now() - room.startTime) / 1000
     });
 
     room.leaderboard.sort((a, b) => {
@@ -274,7 +276,7 @@ io.on('connection', (socket) => {
       }
       return a.time - b.time;
     });
-    
+
 
     io.to(roomId).emit('leaderboard_updated', {
       leaderboard: room.leaderboard
